@@ -70,7 +70,59 @@ public:
         result += other;
         return result;
     }
+    // Broadcast addition: supports adding a row vector (1 x col) or column vector (row x 1) to a matrix
+    Matrix broadcast_add(const Matrix &other) const
+    {
+        if (other.row == 1 && other.col == col)
+        {
+            // Row vector broadcast
+            Matrix result(row, col);
+            for (int i = 0; i < row; ++i)
+                for (int j = 0; j < col; ++j)
+                    result.data[i][j] = data[i][j] + other.data[0][j];
+            return result;
+        }
+        else if (other.col == 1 && other.row == row)
+        {
+            // Column vector broadcast
+            Matrix result(row, col);
+            for (int i = 0; i < row; ++i)
+                for (int j = 0; j < col; ++j)
+                    result.data[i][j] = data[i][j] + other.data[i][0];
+            return result;
+        }
+        else
+        {
+            throw std::invalid_argument("Broadcast add: dimensions do not match for broadcasting.");
+        }
+    }
 
+    // Broadcast subtraction: supports subtracting a row vector (1 x col) or column vector (row x 1) from a matrix
+    Matrix broadcast_sub(const Matrix &other) const
+    {
+        if (other.row == 1 && other.col == col)
+        {
+            // Row vector broadcast
+            Matrix result(row, col);
+            for (int i = 0; i < row; ++i)
+                for (int j = 0; j < col; ++j)
+                    result.data[i][j] = data[i][j] - other.data[0][j];
+            return result;
+        }
+        else if (other.col == 1 && other.row == row)
+        {
+            // Column vector broadcast
+            Matrix result(row, col);
+            for (int i = 0; i < row; ++i)
+                for (int j = 0; j < col; ++j)
+                    result.data[i][j] = data[i][j] - other.data[i][0];
+            return result;
+        }
+        else
+        {
+            throw std::invalid_argument("Broadcast sub: dimensions do not match for broadcasting.");
+        }
+    }
     Matrix operator-(const Matrix &other) const
     {
         check_same_size(other);
