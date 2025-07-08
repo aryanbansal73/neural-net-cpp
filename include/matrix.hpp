@@ -1,5 +1,7 @@
+#pragma once
 #include <iostream>
 #include <vector>
+#include <algorithm> // For std::max_element
 
 class Matrix
 {
@@ -203,11 +205,16 @@ public:
             }
         }
     }
-    
+    int get_row(){
+        return row ; 
+    }
+    int get_col(){
+        return col ;
+    }
+    std::vector<std::vector<float>> data;
     
 private:
     int row, col;
-    std::vector<std::vector<float>> data;
     void check_same_size(const Matrix &other) const
     {
         if (row != other.row || col != other.col)
